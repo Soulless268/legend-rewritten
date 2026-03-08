@@ -12,6 +12,13 @@ local char = plr.Character or plr.CharacterAdded:Wait()
 local hrp = char:WaitForChild("HumanoidRootPart") :: Part
 local hum = char:WaitForChild("Humanoid") :: Humanoid
 
+function missing(t, f, fallback)
+	if type(f) == t then return f end
+	return fallback
+end
+
+local queueteleport =  missing("function", queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport))
+
 local ProximityPrompts_Screen = plr.PlayerGui:FindFirstChild("ProximityPrompts")
 
 if not ProximityPrompts_Screen then
@@ -2308,3 +2315,11 @@ end
 runner_adddecen = add_runner_add_decentdant()
 
 runner_removedecen = add_runner_remove_decendant()
+
+local tp_check = false
+plr.OnTeleport:Connect(function()
+	if not tp_check and queueteleport then
+		tp_check = true
+		queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Soulless268/legend-rewritten/refs/heads/main/Source'))()")
+	end
+end)
